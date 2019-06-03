@@ -13,6 +13,7 @@
   </div>
 </template>
 
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.3/leaflet-heat.js'></script>
 <script>
 import axios from 'axios';
 
@@ -28,7 +29,7 @@ export default {
     this.initMap();
     // this.initLayers();
   },
-  methods: { 
+  methods: {
       initMap() {
         this.map = L.map('map').setView([38.63, -90.23], 12);
 
@@ -41,6 +42,7 @@ export default {
         );
 
         this.tileLayer.addTo(this.map);
+        var heat = L.heatLayer(addressPoints, {maxZoom: 18}).addTo(map);
         this.map.on('load', this.get_data_for_bbox)
         this.map.on('moveend', this.get_data_for_bbox)
       },
@@ -49,9 +51,10 @@ export default {
         let bounds = map.getBounds();
         console.log(bounds)
         axios.post("http://localhost:5000/api/ipv4bbox", { "bbox": bounds })
-        .then(function (response) { 
+        .then(function (response) {
           response.data.forEach(point => {
-              L.geoJSON(JSON.parse(point)).addTo(map)
+            console.log(point);
+            heat.addLatLng(L.latLng(point['lat'], point['lng']));
           });
          });
 
