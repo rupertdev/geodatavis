@@ -1,33 +1,29 @@
 <template>
   <div id="app" class="container">
     <div class="row">
-
       <div class="col-md-12">
         <div id=map class=map>
         </div>
         <!-- The map goes here -->
       </div>
-
-
     </div>
   </div>
 </template>
 
-<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-heat/v0.1.3/leaflet-heat.js'></script>
 <script>
-import axios from 'axios';
+import axios from 'axios'
 
 export default {
   data () {
     return {
     map: null,
+    heat: null,
     tileLayer: null,
     layers: []
     }
   },
   mounted() {
     this.initMap();
-    // this.initLayers();
   },
   methods: {
       initMap() {
@@ -41,21 +37,25 @@ export default {
         }
         );
 
+        // Add tile and heatmap layers to the map
         this.tileLayer.addTo(this.map);
-        var heat = L.heatLayer(addressPoints, {maxZoom: 18}).addTo(map);
+        this.heat = L.heatLayer([], {'radius': 20}).addTo(this.map);
+
+        // Add event handlers to the map
         this.map.on('load', this.get_data_for_bbox)
         this.map.on('moveend', this.get_data_for_bbox)
       },
       get_data_for_bbox(e) {
-        map = e.target
-        let bounds = map.getBounds();
-        console.log(bounds)
-        axios.post("http://localhost:5000/api/ipv4bbox", { "bbox": bounds })
+        var latlngs = []
+
+        // On move or load, request heatmap data from the DB
+        self = this;
+        axios.post("http://localhost:5000/api/ipv4bbox", { "bbox":  e.target.getBounds() })
         .then(function (response) {
           response.data.forEach(point => {
-            console.log(point);
-            heat.addLatLng(L.latLng(point['lat'], point['lng']));
+            latlngs.push(L.latLng(point['lat'], point['lng'], point['count']));
           });
+          self.heat.setLatLngs(latlngs);
          });
 
       }
@@ -64,5 +64,10 @@ export default {
 </script>
 
 <style>
-.map { height: 600px; }
+.map {
+  height: 100%;
+  min-width: 80%;
+}
+.container {max-width: 90%;}
+.row { min-height: 800px; }
 </style>

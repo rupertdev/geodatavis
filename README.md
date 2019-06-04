@@ -22,7 +22,7 @@ PRIMARY KEY(network)
 ```
 4. Create geography column with `SELECT AddGeometryColumn('ipv4geo', 'geometry', 4326, 'POINT', 2);`
 5. Copy in data from CSV file with 
-```
+```sql
 COPY ipv4geo
 FROM '/Users/rupert/projects/geodatavis/data/GeoLite2-City-Blocks-IPv4.csv'
 CSV DELIMITER ',' HEADER;

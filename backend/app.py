@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request
-from backend.utils.geo import get_ipv4_networks_for_bbox
+from utils.geo import get_ipv4_networks_for_bbox
 from flask_cors import CORS
 
 app = Flask(__name__,
-            static_folder = "./dist/static",
-            template_folder = "./dist")
+            static_folder = "../dist/static",
+            template_folder = "../dist")
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 @app.route('/api/ipv4bbox', methods=['POST'])
