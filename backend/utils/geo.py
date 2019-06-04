@@ -5,8 +5,10 @@ def get_ipv4_networks_for_bbox(bbox):
     try:
         return_points = []
         connection = connect(
-            host="127.0.0.1",
-            database='postgres',
+            host="ec2-54-225-106-93.compute-1.amazonaws.com",
+            database='d4f34fpjsa5fdb',
+            user='pebvxguuqlfpsj',
+            password='a74ec8102f182e03a6eea9ff9ece26bab6a9c1a227f909287a3997e04694065e',
             port='5432')
 
         cursor = connection.cursor()

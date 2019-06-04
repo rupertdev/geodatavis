@@ -50,7 +50,7 @@ export default {
 
         // On move or load, request heatmap data from the DB
         self = this;
-        axios.post("http://localhost:5000/api/ipv4bbox", { "bbox":  e.target.getBounds() })
+        axios.post("https://geodatavis.herokuapp.com/api/ipv4bbox", { "bbox":  e.target.getBounds() })
         .then(function (response) {
           response.data.forEach(point => {
             latlngs.push(L.latLng(point['lat'], point['lng'], point['count']));
