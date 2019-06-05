@@ -43,11 +43,12 @@ export default {
 
       // Add event handlers to the map
       this.map.on("load", this.get_data_for_bbox);
+      // this.map.on('zoomend', this.get_data_for_bbox)
       this.map.on("moveend", this.get_data_for_bbox);
     },
     get_data_for_bbox(e) {
       var latlngs = [];
-
+      console.log("FIRED")
       // On move or load, request heatmap data from the DB
       self = this;
       axios
