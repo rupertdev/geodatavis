@@ -1,6 +1,7 @@
 IP Address Geo Data Visualization
+---
 
-Setup:
+## Setup:
 1. Create a Postgres Database
 2. Install PostGIS with `CREATE EXTENSION postgis;`
 3. Create a table for the IPv4 geo data with:
@@ -21,7 +22,7 @@ PRIMARY KEY(network)
 )
 ```
 4. Create geography column with `SELECT AddGeometryColumn('ipv4geo', 'geometry', 4326, 'POINT', 2);`
-5. Copy in data from CSV file with 
+5. Copy in data from CSV file with
 ```sql
 COPY ipv4geo
 FROM '/Users/rupert/projects/geodatavis/data/GeoLite2-City-Blocks-IPv4.csv'
@@ -29,3 +30,23 @@ CSV DELIMITER ',' HEADER;
 ```
 6. Create a spacial index with `CREATE INDEX geometry_gix ON ipv4geo USING GIST (geometry);`
 7. Vacuum the table to make sure the index is used to its full advantage `VACUUM ipv4geo;`
+
+## Dev Setup
+
+1. build virtualenv and download python dependencies
+```bash
+cd backend
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+2. Install javascript dependencies
+```bash
+cd frontend
+npm install
+```
+
+## Running Locally
+Two terminals:
+1. `cd frontend && npm run dev`
+2. `export FLASK_APP=app.py && flask run`
